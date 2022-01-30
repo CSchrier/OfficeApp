@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+   <center>
+      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <content>
+            <TableView fx:id="bayTable" prefHeight="675.0" prefWidth="1077.0">
+              <columns>
+                <TableColumn fx:id="JobColumn" prefWidth="75.0" text="Job" />
+                <TableColumn fx:id="BinColumn" prefWidth="75.0" text="Bin" />
+                  <TableColumn fx:id="AisleColumn" prefWidth="75.0" text="Aisle" />
+                  <TableColumn fx:id="BayColumn" prefWidth="75.0" text="Bay" />
+                  <TableColumn fx:id="TimeColumn" minWidth="150.0" prefWidth="75.0" text="Time" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+   </center>
+   <left>
+      <TabPane>
+         <tabs>
+            <Tab closable="false" text="Search">
+               <content>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="JobToSearch" layoutX="26.0" layoutY="56.0" onAction="#SearchBtn" promptText="Job" />
+                        <Button layoutX="75.0" layoutY="95.0" mnemonicParsing="false" onAction="#SearchBtn" text="Search" />
+                        <Button layoutX="75.0" layoutY="143.0" mnemonicParsing="false" onAction="#ResetBtn" text="Reset" />
+                        <Label fx:id="OutLabel" layoutX="25.0" layoutY="246.0" prefHeight="50.0" prefWidth="150.0">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font></Label>
+                     </children>
+                  </Pane>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Edit">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </left>
+   <bottom>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+        </buttons>
+      </ButtonBar>
+   </bottom>
+</BorderPane>
