@@ -1,18 +1,13 @@
 package application;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -20,12 +15,10 @@ import java.util.LinkedList;
 
 public class MainGUI extends Application {
     static LinkedList<Bay> bayList = new LinkedList<>();
-    //static File networkPath = new File("\\Z:\\\\Tech\\Bin Data\\data.txt"); //Work Z drive
-    //static File networkPath = new File("C:\\Program Files\\Keystone\\data.txt"); //home pc for testing
 
 
-    static File networkPath = new File("BinData.txt");
-    static File newNetworkPath = new File(networkPath.getAbsolutePath());
+    static File getNetworkPath = new File("BinData.txt");
+    static File networkPath = new File(getNetworkPath.getAbsolutePath());
 
     static File loadFrom = new File("data.txt");
 
@@ -43,13 +36,13 @@ public class MainGUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        if(!networkPath.exists()){
+        if(!getNetworkPath.exists()){
             System.out.println("Doesn't exist");
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
 
-            newNetworkPath = file;
-            String path = newNetworkPath.getAbsolutePath();
+            networkPath = file;
+            String path = networkPath.getAbsolutePath();
             PrintWriter writer = new PrintWriter("BinData.txt", StandardCharsets.UTF_8);
             writer.println(path);
             writer.close();
@@ -66,13 +59,13 @@ public class MainGUI extends Application {
            // newNetworkPath=getMaster.getFile();
 
         }else{
-            BufferedReader in = new BufferedReader(new FileReader(networkPath));
+            BufferedReader in = new BufferedReader(new FileReader(getNetworkPath));
             String path = in.readLine();
-            newNetworkPath = new File(path);
+            networkPath = new File(path);
         }
 
 
-        new FileCopy(newNetworkPath,localPath);
+        new FileCopy(networkPath,localPath);
 
         BufferedReader in = new BufferedReader(new FileReader(localPath)); //Local storage
         int fileSize = 720;
@@ -123,7 +116,7 @@ public class MainGUI extends Application {
 
         root = loader.load();
         MainController mainController = loader.getController();
-        mainController.sendData(bayList,newNetworkPath,localPath);
+        mainController.sendData(bayList,networkPath,localPath);
 
         Scene scene = new Scene(root);
 
