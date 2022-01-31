@@ -8,7 +8,10 @@ public class FileCopy {
     FileCopy(File from, File to) throws IOException {
         System.out.println("from "+from);
         System.out.println("to "+to);
+
+
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(from));
+
         BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(to));
 
 
