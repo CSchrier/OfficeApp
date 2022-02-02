@@ -68,7 +68,12 @@ public class MainGUI extends Application {
         new FileCopy(networkPath,localPath);
 
         BufferedReader in = new BufferedReader(new FileReader(localPath)); //Local storage
-        int fileSize = 720;
+        BufferedReader counter = new BufferedReader(new FileReader(localPath));
+        int fileSizeCounter = 0;
+        while(counter.readLine()!=null){
+            fileSizeCounter++;
+        }
+        int fileSize = fileSizeCounter;
 
         for (int i = 0; i < fileSize; i++) {
             String aisle;
