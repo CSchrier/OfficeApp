@@ -10,7 +10,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
@@ -21,7 +20,7 @@ public class MainGUI extends Application {
 
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
 
         launch(args); //start the application!
@@ -51,9 +50,8 @@ public class MainGUI extends Application {
         if(!getNetworkPath.exists()){
             System.out.println("Doesn't exist");
             FileChooser fileChooser = new FileChooser();
-            File file = fileChooser.showOpenDialog(new Stage());
 
-            networkPath = file;
+            networkPath = fileChooser.showOpenDialog(new Stage());
             String path = networkPath.getAbsolutePath();
             PrintWriter writer = new PrintWriter("BinData.txt", StandardCharsets.UTF_8);
             writer.println(path);
@@ -65,10 +63,7 @@ public class MainGUI extends Application {
 
 
 
-            //newNetworkPath.createNewFile();
-           // MasterFilePath getMaster = new MasterFilePath();
-            //getMaster.main(args);
-           // newNetworkPath=getMaster.getFile();
+
 
         }else{
             BufferedReader in = new BufferedReader(new FileReader(getNetworkPath));

@@ -1,6 +1,5 @@
 package application;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,8 +8,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -125,13 +122,6 @@ public class MainController {
                         System.out.println("Added bin " + bay.getBin());
                     }
                 }
-            /*
-            for(int i = 0; i<bayList.size();i++){
-                if(bayList.get(i).getJob()==jobNum){
-
-                }
-            }
-            */
                 OutLabel.setText(SortedList.size()+" Bins");
                 SearchedList.clear();
                 sortedData = FXCollections.observableList(SortedList);
@@ -244,9 +234,9 @@ public class MainController {
 
     public void RemoveAllBins() throws IOException {
         PrintWriter writer = new PrintWriter(localPath);
-        for(int j = 0; j< bayList.size();j++){
-            writer.println(bayList.get(j).writeData());
-            System.out.println(bayList.get(j).writeData());
+        for (Bay bay : bayList) {
+            writer.println(bay.writeData());
+            System.out.println(bay.writeData());
         }
         roomTable.getItems().clear();
         writer.close();
@@ -259,7 +249,4 @@ public class MainController {
         bay.setJob(bayIntegerCellEditEvent.getNewValue());
     }
 
-    public void deleteRoomBin(){
-
-    }
 }
