@@ -9,6 +9,7 @@ public class Bay {
     public int bay;
     public int job;
     public int bin;
+    public String location = "";
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy-HH:mm");
     LocalDateTime now = LocalDateTime.now();
     String time;
@@ -42,6 +43,10 @@ public class Bay {
     public int getJob() {
         return job;
     }
+    public String getLocation(){
+        location = aisle+bay;
+        return location;
+    }
     public void setJob(int jobNumber) {
         this.job = jobNumber;
     }
@@ -60,7 +65,13 @@ public class Bay {
         this.job = jobNum;
         this.bin = jobSub;
         this.time = time;
-        //this.jobSize = jobSize;
+    }
+    public Bay(int job, int bin, String time){
+        this.aisle = "0";
+        this.bay = 0;
+        this.job = job;
+        this.bin = bin;
+        this.time = time;
     }
 
     public String writeData() {
@@ -73,6 +84,12 @@ public class Bay {
         return toBeWritten;
 
 
+    }
+
+    public String writeDataRoom(){
+        String toBeWritten;
+        toBeWritten = job + " " + bin + " "+ time;
+    return toBeWritten;
     }
 
 

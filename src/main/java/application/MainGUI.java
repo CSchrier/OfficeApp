@@ -10,19 +10,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 public class MainGUI extends Application {
-    static LinkedList<Bay> bayList = new LinkedList<>();
 
-
-    static File getNetworkPath = new File("BinData.txt");
-    static File networkPath = new File(getNetworkPath.getAbsolutePath());
-
-    static File loadFrom = new File("data.txt");
-
-    static File localPath = new File(loadFrom.getAbsolutePath());
 
 
 
@@ -35,6 +28,25 @@ public class MainGUI extends Application {
     }
     @Override
     public void start(Stage stage) throws IOException {
+        LinkedList<Bay> bayList = new LinkedList<>();
+        LinkedList<Bay> roomList = new LinkedList<>();
+
+
+        File getNetworkPath = new File("BinData.txt");
+        File networkPath = new File(getNetworkPath.getAbsolutePath());
+
+        System.out.println(getNetworkPath);
+        System.out.println(networkPath);
+
+
+        File loadFrom = new File("data.txt");
+
+
+
+        File test = new File("data.txt");
+        System.out.println("test path " +test.getAbsolutePath());
+
+        File localPath = new File(loadFrom.getAbsolutePath());
 
         if(!getNetworkPath.exists()){
             System.out.println("Doesn't exist");
@@ -73,9 +85,10 @@ public class MainGUI extends Application {
         while(counter.readLine()!=null){
             fileSizeCounter++;
         }
-        int fileSize = fileSizeCounter;
+        System.out.println(fileSizeCounter);
 
-        for (int i = 0; i < fileSize; i++) {
+
+        for (int i = 0; i < fileSizeCounter; i++) {
             String aisle;
             int bay;
             int job;
@@ -88,10 +101,14 @@ public class MainGUI extends Application {
                 System.out.println("I/O Error");
                 System.exit(0);
             }
+
             if (line == null) {
                 return;
-            } else {
-                String[] data = line.split("\\s");
+
+            }
+            String[] data = line.split("\\s");
+            if(data.length == 5) {
+
                 aisle = data[0];
                 bay = Integer.parseInt(data[1]);
                 job = Integer.parseInt(data[2]);
@@ -100,6 +117,13 @@ public class MainGUI extends Application {
                 Bay temp = new Bay(aisle, bay, job, bin, time);
                 bayList.add(temp);
 
+            } else if(data.length == 3){
+                //String[] data = line.split("\\s");
+                job = Integer.parseInt(data[0]);
+                bin = Integer.parseInt(data[1]);
+                time = data[2];
+                Bay temp = new Bay (job, bin, time);
+                roomList.add(temp);
             }
 
         }
@@ -119,9 +143,10 @@ public class MainGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
 
 
+
         root = loader.load();
         MainController mainController = loader.getController();
-        mainController.sendData(bayList,networkPath,localPath);
+        mainController.sendData(bayList,roomList,networkPath,localPath);
 
         Scene scene = new Scene(root);
 
