@@ -152,8 +152,9 @@ public class MainGUI extends Application {
 
         stage.setTitle("Keystone Bin Application");
         stage.getIcons().add(icon);
-        stage.setScene(scene);
 
+        
+        stage.setScene(scene);
         stage.show();
     }
 

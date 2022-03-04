@@ -14,6 +14,7 @@ import java.util.LinkedList;
 
 public class MainController {
     LinkedList<Bay> bayList;
+    LinkedList<Bay> filledBayList = new LinkedList<>();
     LinkedList<Bay> SearchedList = new LinkedList<>();
     LinkedList<Bay> SortedList = new LinkedList<>();
     LinkedList<Bay> roomList = new LinkedList<>();
@@ -57,8 +58,16 @@ public class MainController {
         localPath = local;
         bayList = bays;
         roomList = room;
-        data = FXCollections.observableList(bayList);
+        //uncomment the following line for empty bays to show up in the table
+        //data = FXCollections.observableList(bayList);
         RoomData = FXCollections.observableList(roomList);
+        for(int i = 0; i < bayList.size();i++){
+            if((bayList.get(i).getJob())!=0){
+                filledBayList.add(bayList.get(i));
+            }
+            data = FXCollections.observableList(filledBayList);
+            OutLabel.setText(filledBayList.size()+" Bins");
+        }
         setBayTable(data);
         setRoomTable(RoomData);
 
@@ -67,7 +76,16 @@ public class MainController {
     public void sendData(LinkedList<Bay> input, LinkedList<Bay> room){
         bayList = input;
         roomList = room;
-        data = FXCollections.observableList(bayList);
+        //uncomment the following line for empty bays to show up in the table
+        //data = FXCollections.observableList(bayList);
+        for(int i = 0; i < bayList.size();i++){
+            if((bayList.get(i).getJob())!=0){
+                filledBayList.add(bayList.get(i));
+            }
+            data = FXCollections.observableList(filledBayList);
+            OutLabel.setText(filledBayList.size()+" Bins");
+
+        }
         RoomData = FXCollections.observableList(roomList);
         setBayTable(data);
         setRoomTable(RoomData);
@@ -77,10 +95,12 @@ public class MainController {
     public void setBayTable(ObservableList<Bay> tableSetter) {
 
         JobColumn.setCellValueFactory(new PropertyValueFactory<>("job"));
+
         BinColumn.setCellValueFactory(new PropertyValueFactory<>("bin"));
         LocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
 
         TimeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+
         bayTable.setItems(tableSetter);
     }
     public void setRoomTable(ObservableList<Bay> tableSetter) {
@@ -140,11 +160,14 @@ public class MainController {
         sortedData.clear();
         setBayTable(data);
         setRoomTable(RoomData);
+        OutLabel.setText(filledBayList.size()+" Bins");
+
     }
 
     public void refresh() throws IOException {
         new FileCopy(networkPath,localPath);
         bayList.clear();
+        filledBayList.clear();
         roomList.clear();
         BufferedReader in = new BufferedReader(new FileReader(localPath)); //Local storage
         BufferedReader counter = new BufferedReader(new FileReader(localPath));
