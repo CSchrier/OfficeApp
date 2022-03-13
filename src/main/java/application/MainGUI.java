@@ -10,8 +10,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class MainGUI extends Application {
 
@@ -31,45 +33,29 @@ public class MainGUI extends Application {
         LinkedList<Bay> roomList = new LinkedList<>();
 
 
-        File getNetworkPath = new File("BinData.txt");
-        File networkPath = new File(getNetworkPath.getAbsolutePath());
-
-        System.out.println(getNetworkPath);
-        System.out.println(networkPath);
-
-
-        File loadFrom = new File("data.txt");
-
-
-
-        File test = new File("data.txt");
-        System.out.println("test path " +test.getAbsolutePath());
-
-        File localPath = new File(loadFrom.getAbsolutePath());
-
-        if(!getNetworkPath.exists()){
-            System.out.println("Doesn't exist");
-            FileChooser fileChooser = new FileChooser();
-
-            networkPath = fileChooser.showOpenDialog(new Stage());
-            String path = networkPath.getAbsolutePath();
-            PrintWriter writer = new PrintWriter("BinData.txt", StandardCharsets.UTF_8);
-            writer.println(path);
-            writer.close();
-
-
-
-
-
-
-
-
-
-        }else{
-            BufferedReader in = new BufferedReader(new FileReader(getNetworkPath));
-            String path = in.readLine();
-            networkPath = new File(path);
+        Scanner scan = new Scanner(System.in);
+        String str;
+        Socket s;
+        PrintWriter pw;
+        InputStreamReader in;
+        BufferedReader br;
+        while(true){
+            str = scan.nextLine();
+            s = new Socket("192.168.1.5", 4999);
+            pw = new PrintWriter(s.getOutputStream());
+            pw.println(str);
+            pw.flush();
+            in = new InputStreamReader(s.getInputStream());
+            br = new BufferedReader(in);
+            str = br.readLine();
+            System.out.println(str);
         }
+
+
+
+
+
+
 
 
         new FileCopy(networkPath,localPath);
