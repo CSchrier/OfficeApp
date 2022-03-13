@@ -33,12 +33,13 @@ public class MainGUI extends Application {
         LinkedList<Bay> roomList = new LinkedList<>();
 
 
-        Scanner scan = new Scanner(System.in);
+
         String str;
         Socket s;
         PrintWriter pw;
         InputStreamReader in;
         BufferedReader br;
+        /*
         while(true){
             str = scan.nextLine();
             s = new Socket("192.168.1.5", 4999);
@@ -50,44 +51,22 @@ public class MainGUI extends Application {
             str = br.readLine();
             System.out.println(str);
         }
-
-
-
-
-
-
-
-
-        new FileCopy(networkPath,localPath);
-
-        BufferedReader in = new BufferedReader(new FileReader(localPath)); //Local storage
-        BufferedReader counter = new BufferedReader(new FileReader(localPath));
-        int fileSizeCounter = 0;
-        while(counter.readLine()!=null){
-            fileSizeCounter++;
-        }
-        System.out.println(fileSizeCounter);
-
-
-        for (int i = 0; i < fileSizeCounter; i++) {
+        */
+        s = new Socket("192.168.1.5", 4999);
+        pw = new PrintWriter(s.getOutputStream());
+        pw.println("1 0");
+        pw.flush();
+        in = new InputStreamReader(s.getInputStream());
+        br = new BufferedReader(in);
+        System.out.println("Data received From server");
+        System.out.println("Data sorting starting");
+        while((str = br.readLine()) != null) {
             String aisle;
             int bay;
             int job;
             int bin;
             String time;
-            String line = "";
-            try {
-                line = in.readLine();
-            } catch (IOException e) {
-                System.out.println("I/O Error");
-                System.exit(0);
-            }
-
-            if (line == null) {
-                return;
-
-            }
-            String[] data = line.split("\\s");
+            String[] data = str.split("\\s");
             if(data.length == 5) {
 
                 aisle = data[0];
@@ -99,7 +78,7 @@ public class MainGUI extends Application {
                 bayList.add(temp);
 
             } else if(data.length == 3){
-                //String[] data = line.split("\\s");
+
                 job = Integer.parseInt(data[0]);
                 bin = Integer.parseInt(data[1]);
                 time = data[2];
@@ -107,9 +86,32 @@ public class MainGUI extends Application {
                 roomList.add(temp);
             }
 
-        }
 
+        }
+        br.close();
         System.out.println("Data loaded");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -127,7 +129,7 @@ public class MainGUI extends Application {
 
         root = loader.load();
         MainController mainController = loader.getController();
-        mainController.sendData(bayList,roomList,networkPath,localPath);
+        mainController.sendData(bayList,roomList);
 
         Scene scene = new Scene(root);
 

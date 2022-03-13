@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.LinkedList;
 
 public class MainController {
@@ -22,6 +23,11 @@ public class MainController {
     ObservableList<Bay> sortedData;
     ObservableList<Bay> RoomData;
     String jobToSearch = "";
+    String str;
+    Socket s;
+    PrintWriter pw;
+    InputStreamReader in;
+    BufferedReader br;
 
     File networkPath;
     File localPath;
@@ -165,39 +171,24 @@ public class MainController {
     }
 
     public void refresh() throws IOException {
-        new FileCopy(networkPath,localPath);
         bayList.clear();
         filledBayList.clear();
         roomList.clear();
-        BufferedReader in = new BufferedReader(new FileReader(localPath)); //Local storage
-        BufferedReader counter = new BufferedReader(new FileReader(localPath));
-        int fileSizeCounter = 0;
-        while(counter.readLine()!=null){
-            fileSizeCounter++;
-        }
-        counter.close();
-        System.out.println(fileSizeCounter);
-
-
-        for (int i = 0; i < fileSizeCounter; i++) {
+        s = new Socket("192.168.1.5", 4999);
+        pw = new PrintWriter(s.getOutputStream());
+        pw.println("1 0");
+        pw.flush();
+        in = new InputStreamReader(s.getInputStream());
+        br = new BufferedReader(in);
+        System.out.println("Data received From server");
+        System.out.println("Data sorting starting");
+        while((str = br.readLine()) != null) {
             String aisle;
             int bay;
             int job;
             int bin;
             String time;
-            String line = "";
-            try {
-                line = in.readLine();
-            } catch (IOException e) {
-                System.out.println("I/O Error");
-                System.exit(0);
-            }
-
-            if (line == null) {
-                return;
-
-            }
-            String[] data = line.split("\\s");
+            String[] data = str.split("\\s");
             if(data.length == 5) {
 
                 aisle = data[0];
@@ -209,7 +200,7 @@ public class MainController {
                 bayList.add(temp);
 
             } else if(data.length == 3){
-                //String[] data = line.split("\\s");
+
                 job = Integer.parseInt(data[0]);
                 bin = Integer.parseInt(data[1]);
                 time = data[2];
@@ -217,7 +208,10 @@ public class MainController {
                 roomList.add(temp);
             }
 
+
         }
+        br.close();
+        System.out.println("Data Loaded!");
         sendData(bayList,roomList);
     }
 
@@ -256,14 +250,11 @@ public class MainController {
 
 
     public void RemoveAllBins() throws IOException {
-        PrintWriter writer = new PrintWriter(localPath);
-        for (Bay bay : bayList) {
-            writer.println(bay.writeData());
-            System.out.println(bay.writeData());
-        }
-        roomTable.getItems().clear();
-        writer.close();
-        new FileCopy(localPath,networkPath);
+        s = new Socket("192.168.1.5", 4999);
+        pw = new PrintWriter(s.getOutputStream());
+        pw.println("1 1");
+        pw.flush();
+        refresh();
 
     }
 
