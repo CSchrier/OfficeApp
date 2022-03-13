@@ -120,7 +120,7 @@ public class MainController {
     }
 
     public void SearchBtn(){
-
+        SortedList.clear();
         if(!jobToSearch.equals(JobToSearch.getText())){
             jobToSearch=JobToSearch.getText();
             if(jobToSearch.equals("")){
@@ -137,7 +137,6 @@ public class MainController {
                     }
                 }
                 System.out.println("sorting "+ SearchedList.size()+" items");
-
                 for(int j = 1; j<30;j++) {
                     for (Bay bay : SearchedList){
 
@@ -150,17 +149,20 @@ public class MainController {
                 }
                 OutLabel.setText(SortedList.size()+" Bins");
                 SearchedList.clear();
+
                 sortedData = FXCollections.observableList(SortedList);
                 setBayTable(sortedData);
+
             }
         }
 
-
+        JobToSearch.clear();
 
 
     }
 
     public void ResetBtn(){
+        JobToSearch.clear();
         OutLabel.setText("");
         jobToSearch="";
         sortedData.clear();
