@@ -73,6 +73,12 @@ public class Bay {
         this.bin = bin;
         this.time = time;
     }
+    public Bay(String aisle, int bay, int palletID, String time){
+        this.aisle = aisle;
+        this.bay = bay;
+        this.job = palletID;
+        this.time = time;
+    }
 
     public String writeData() {
         String toBeWritten;

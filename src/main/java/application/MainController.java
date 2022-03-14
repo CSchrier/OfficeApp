@@ -19,9 +19,12 @@ public class MainController {
     LinkedList<Bay> SearchedList = new LinkedList<>();
     LinkedList<Bay> SortedList = new LinkedList<>();
     LinkedList<Bay> roomList = new LinkedList<>();
+    LinkedList<Bay> finishedList = new LinkedList<>();
+
     ObservableList<Bay> data;
     ObservableList<Bay> sortedData;
     ObservableList<Bay> RoomData;
+    ObservableList<Bay> finishedData;
     String jobToSearch = "";
     String str;
     Socket s;
@@ -56,6 +59,15 @@ public class MainController {
     @FXML
     public TableColumn<Bay, String> TimeColumn2;
 
+    @FXML
+    public TableView<Bay> GoodsTable;
+    @FXML
+    public TableColumn<Bay, Integer> GoodsID;
+    @FXML
+    public TableColumn<Bay, Integer> GoodsLocation;
+    @FXML
+    public TableColumn<Bay, String> GoodsTime;
+
 
 
 
@@ -79,9 +91,10 @@ public class MainController {
 
     }
 
-    public void sendData(LinkedList<Bay> input, LinkedList<Bay> room){
+    public void sendData(LinkedList<Bay> input, LinkedList<Bay> room,LinkedList<Bay> finished){
         bayList = input;
         roomList = room;
+        finishedList = finished;
         //uncomment the following line for empty bays to show up in the table
         //data = FXCollections.observableList(bayList);
         for(int i = 0; i < bayList.size();i++){
@@ -93,8 +106,20 @@ public class MainController {
 
         }
         RoomData = FXCollections.observableList(roomList);
+        finishedData = FXCollections.observableList(finishedList);
         setBayTable(data);
         setRoomTable(RoomData);
+        setFinishedTable(finishedData);
+    }
+
+    private void setFinishedTable(ObservableList<Bay> finishedData) {
+        GoodsID.setCellValueFactory(new PropertyValueFactory<>("job"));
+
+        GoodsLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+
+        GoodsTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        GoodsTable.setItems(finishedData);
     }
 
 
@@ -201,6 +226,14 @@ public class MainController {
                 Bay temp = new Bay(aisle, bay, job, bin, time);
                 bayList.add(temp);
 
+            }else if(data.length == 4){
+                aisle = data[0];
+                bay = Integer.parseInt(data[1]);
+                job = Integer.parseInt(data[2]);
+                time = data[3];
+                Bay temp = new Bay(aisle,bay,job,time);
+                finishedList.add(temp);
+
             } else if(data.length == 3){
 
                 job = Integer.parseInt(data[0]);
@@ -214,7 +247,8 @@ public class MainController {
         }
         br.close();
         System.out.println("Data Loaded!");
-        sendData(bayList,roomList);
+
+        sendData(bayList,roomList,finishedList);
     }
 
     public void RemoveFromRoom() throws IOException {

@@ -31,6 +31,7 @@ public class MainGUI extends Application {
     public void start(Stage stage) throws IOException {
         LinkedList<Bay> bayList = new LinkedList<>();
         LinkedList<Bay> roomList = new LinkedList<>();
+        LinkedList<Bay> finishedList = new LinkedList<>();
 
 
 
@@ -77,7 +78,15 @@ public class MainGUI extends Application {
                 Bay temp = new Bay(aisle, bay, job, bin, time);
                 bayList.add(temp);
 
-            } else if(data.length == 3){
+            }else if(data.length == 4){
+                aisle = data[0];
+                bay = Integer.parseInt(data[1]);
+                job = Integer.parseInt(data[2]);
+                time = data[3];
+                Bay temp = new Bay(aisle,bay,job,time);
+                finishedList.add(temp);
+
+            }else if(data.length == 3){
 
                 job = Integer.parseInt(data[0]);
                 bin = Integer.parseInt(data[1]);
@@ -92,34 +101,6 @@ public class MainGUI extends Application {
         System.out.println("Data loaded");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         Parent root;
 
         //Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
@@ -129,7 +110,7 @@ public class MainGUI extends Application {
 
         root = loader.load();
         MainController mainController = loader.getController();
-        mainController.sendData(bayList,roomList);
+        mainController.sendData(bayList,roomList,finishedList);
 
         Scene scene = new Scene(root);
 
