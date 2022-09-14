@@ -53,12 +53,23 @@ public class MainGUI extends Application {
             System.out.println(str);
         }
         */
-        s = new Socket("192.168.1.5", 4999);
+
+
+        /* uncomment me for final
+        s = new Socket("192.168.29.49", 4999);
         pw = new PrintWriter(s.getOutputStream());
         pw.println("1 0");
         pw.flush();
-        in = new InputStreamReader(s.getInputStream());
-        br = new BufferedReader(in);
+        in = new InputStreamReader(s.getOutputStream());
+        br = new BufferedReader(in)
+
+         */
+        //comment this out for final production
+        File dataFile = new File("target/classes/data.txt");
+        br = new BufferedReader(new FileReader(dataFile));
+        //comment out till here, for internal testing only
+
+
         System.out.println("Data received From server");
         System.out.println("Data sorting starting");
         while((str = br.readLine()) != null) {

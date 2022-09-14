@@ -108,8 +108,8 @@ public class MainController {
         RoomData = FXCollections.observableList(roomList);
         finishedData = FXCollections.observableList(finishedList);
         setBayTable(data);
-        setRoomTable(RoomData);
-        setFinishedTable(finishedData);
+        //setRoomTable(RoomData);
+        //setFinishedTable(finishedData);
     }
 
     private void setFinishedTable(ObservableList<Bay> finishedData) {
@@ -151,17 +151,23 @@ public class MainController {
             if(jobToSearch.equals("")){
                 System.out.println("Empty Search");
             }else{
+
                 int jobNum = Integer.parseInt(JobToSearch.getText());
                 System.out.println(jobNum);
 
 
-                for (Bay bay : bayList) {
-                    if (bay.getJob() == jobNum) {
+                for (Bay bay : bayList) {       //Adds all bay items into a new list
+                    if (bay.getJob() == jobNum) {                     // but puts the searched for bays at the front
+                        SearchedList.addFirst(bay);
+                    }else{
                         SearchedList.add(bay);
-                        System.out.println("Added bin "+ bay.getBin());
                     }
                 }
+
+
+                /* may delete everything in this comment if above's sorting works better
                 System.out.println("sorting "+ SearchedList.size()+" items");
+
                 for(int j = 1; j<30;j++) {
                     for (Bay bay : SearchedList){
 
@@ -175,7 +181,9 @@ public class MainController {
                 OutLabel.setText(SortedList.size()+" Bins");
                 SearchedList.clear();
 
-                sortedData = FXCollections.observableList(SortedList);
+                 */
+
+                sortedData = FXCollections.observableList(SearchedList);
                 setBayTable(sortedData);
 
             }
