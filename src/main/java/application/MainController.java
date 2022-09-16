@@ -3,15 +3,13 @@ package application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MainController {
     LinkedList<Bay> bayList;
@@ -20,6 +18,8 @@ public class MainController {
     LinkedList<Bay> SortedList = new LinkedList<>();
     LinkedList<Bay> roomList = new LinkedList<>();
     LinkedList<Bay> finishedList = new LinkedList<>();
+
+    LinkedList<Bay> selectedItems = new LinkedList<>();
 
     ObservableList<Bay> data;
     ObservableList<Bay> sortedData;
@@ -68,7 +68,7 @@ public class MainController {
     @FXML
     public TableColumn<Bay, String> GoodsTime;
 
-
+    String ip = "192.168.29.49";
 
 
     public void sendData(LinkedList<Bay> bays, LinkedList<Bay> room,File network, File local){
@@ -108,6 +108,7 @@ public class MainController {
         RoomData = FXCollections.observableList(roomList);
         finishedData = FXCollections.observableList(finishedList);
         setBayTable(data);
+
         //setRoomTable(RoomData);
         //setFinishedTable(finishedData);
     }
@@ -133,6 +134,9 @@ public class MainController {
         TimeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
 
         bayTable.setItems(tableSetter);
+        bayTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
     }
     public void setRoomTable(ObservableList<Bay> tableSetter) {
 
@@ -158,9 +162,9 @@ public class MainController {
 
                 for (Bay bay : bayList) {       //Adds all bay items into a new list
                     if (bay.getJob() == jobNum) {                     // but puts the searched for bays at the front
-                        SearchedList.addFirst(bay);
-                    }else{
                         SearchedList.add(bay);
+                    }else{
+                        //SearchedList.add(bay); dont uncomment, this adds all bays even empty to list
                     }
                 }
 
@@ -200,16 +204,40 @@ public class MainController {
         jobToSearch="";
         sortedData.clear();
         setBayTable(data);
-        setRoomTable(RoomData);
+
         OutLabel.setText(filledBayList.size()+" Bins");
 
     }
+
+    public void sendSkype() throws IOException {
+        if(selectedItems!=null){
+            selectedItems.clear();
+        }
+
+        String bayInfo = "";
+
+        for(int i = 0; i<bayTable.getSelectionModel().getSelectedItems().size();i++){
+            Bay selected = bayTable.getItems().get(i);
+            bayInfo += ("\""+selected.job+"-"+selected.bin+" "+selected.aisle+"-"+selected.bay+"\""+" ");
+        }
+        //System.out.println(bayInfo);
+
+        s = new Socket(ip, 4999);
+        pw = new PrintWriter(s.getOutputStream());
+        pw.println("3 " + bayInfo);
+        pw.flush();
+
+
+
+
+    }
+
 
     public void refresh() throws IOException {
         bayList.clear();
         filledBayList.clear();
         roomList.clear();
-        s = new Socket("192.168.1.5", 4999);
+        s = new Socket(ip, 4999);
         pw = new PrintWriter(s.getOutputStream());
         pw.println("1 0");
         pw.flush();
@@ -294,7 +322,7 @@ public class MainController {
 
 
     public void RemoveAllBins() throws IOException {
-        s = new Socket("192.168.1.5", 4999);
+        s = new Socket(ip, 4999);
         pw = new PrintWriter(s.getOutputStream());
         pw.println("1 1");
         pw.flush();

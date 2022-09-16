@@ -55,18 +55,18 @@ public class MainGUI extends Application {
         */
 
 
-        /* uncomment me for final
+        // uncomment me for final
         s = new Socket("192.168.29.49", 4999);
         pw = new PrintWriter(s.getOutputStream());
         pw.println("1 0");
         pw.flush();
-        in = new InputStreamReader(s.getOutputStream());
-        br = new BufferedReader(in)
+        in = new InputStreamReader(s.getInputStream());
+        br = new BufferedReader(in);
 
-         */
+
         //comment this out for final production
-        File dataFile = new File("target/classes/data.txt");
-        br = new BufferedReader(new FileReader(dataFile));
+        //File dataFile = new File("target/classes/data.txt");
+        //br = new BufferedReader(new FileReader(dataFile));
         //comment out till here, for internal testing only
 
 
